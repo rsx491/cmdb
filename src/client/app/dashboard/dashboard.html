@@ -1,0 +1,174 @@
+<section id="dashboard-view" class="mainbar">
+    <section class="matter">
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <button ng-click="vm.update(vm.selectedId)" ng-disabled="vm.selectedId==false">Update</button>
+                    <button ng-click="vm.view(vm.selectedId)" ng-disabled="vm.selectedId==false">View</button>
+                    <button ng-click="vm.update(-1)">Create New</button>
+                </div>
+                
+                <div class="col-md-6 right">
+                    <p><b>Search: <input type="text" name="searchText" ng-model="vm.searchText" ng-change="vm.searchChanged()"></b></p>
+                </div>
+<div class="col-md-6 left" >
+                <p><b>Show <select ng-model="vm.showEntriesSelection" ng-change="vm.showEntries()" ng-disabled="!vm.showSingle">
+                    <option value="15">15</option>
+                    <option value="30" selected="selected">30</option>
+                    <option value="200">200</option>
+                </select> </b></p><br>
+                    <p>Showing {{(vm.currentPage-1)*vm.entryLimit}} to {{vm.currentPage*vm.entryLimit}} of {{vm.filtered.length}}  entries</p>
+                    <div ng-show="vm.showSingle"><button ng-click="vm.toggleShowLatest();"><span ng-show="vm.entryLimit==1">List All Revisions</span><span ng-show="vm.entryLimit!=1">Latest Revision</span></button></div>
+                </div>
+
+                
+                <div class="col-md-6 right" ng-show="vm.showPages">
+                    <ul style='display:inline-block; margin:0px;' class="pages">
+                        <li ng-repeat="page in vm.pages" ng-class="{active: page.active, disabled: page.disabled}">
+                            <a ng-click="vm.selectPage(page.number)">{{page.label}}</a>
+                        </li>
+                </div>
+
+                <div class="col-md-12" style="clear:both;" ng-show="vm.showRows">
+                    
+                    <div class="widget wviolet">
+                        
+                        <div class="widget-content text-center text-info" data-double-scroll-bar-horizontal>
+                            <table class="table table-condensed table-striped">
+                                <thead>
+                                    <tr>
+                                        <th ng-repeat="field in vm.catalogs.recordSchema" ng-click="vm.toggleSort(field.path);">
+                                            {{field.path}}
+                                            <span ng-show="(vm.sortBy==field.path||vm.sortBy=='-'+field.path)" class="fa" ng-class="{'fa-caret-down':(vm.sortBy==field.path),'fa-caret-up':(vm.sortBy=='-'+fieldpath)}"></span>
+
+                                        </th>
+                                        <!--
+                                        <th ng-click="vm.toggleSort('id');">id
+                                        <span ng-show="(vm.sortBy=='id'||vm.sortBy=='-id')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-id'),'fa-caret-up': (vm.sortBy=='id')}"></span>
+                                        </th>
+                                        <th ng-click="vm.toggleSort('domainname');">Status Date 
+                                            <span ng-show="(vm.sortBy=='domainname'||vm.sortBy=='-domainname')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-domainname'),'fa-caret-up': (vm.sortBy=='domainname')}"></span>
+                                            </th>
+                                        <th ng-click="vm.toggleSort('location');">Location 
+                                        <span ng-show="(vm.sortBy=='location'||vm.sortBy=='-location')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-location'),'fa-caret-up': (vm.sortBy=='location')}"></span>
+                                        </th>
+                                        <th ng-click="vm.toggleSort('system');">System 
+                                        <span ng-show="(vm.sortBy=='system'||vm.sortBy=='-system')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-system'),'fa-caret-up': (vm.sortBy=='system')}"></span>
+                                        </th>
+                                        <th ng-click="vm.toggleSort('physicalhost');">Physical Host 
+                                        <span ng-show="(vm.sortBy=='physicalhost'||vm.sortBy=='-physicalhost')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-physicalhost'),'fa-caret-up': (vm.sortBy=='physicalhost')}"></span>
+                                        </th>
+                                        <th ng-click="vm.toggleSort('physvirtual');">physvirtual 
+                                        <span ng-show="(vm.sortBy=='physvirtual'||vm.sortBy=='-physvirtual')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-physvirtual'),'fa-caret-up': (vm.sortBy=='physvirtual')}"></span>
+                                        </th>
+                                        <th ng-click="vm.toggleSort('domainname');">Domain Name 
+                                        <span ng-show="(vm.sortBy=='domainname'||vm.sortBy=='-domainname')" class="fa" ng-class="{'fa-caret-down': (vm.sortBy=='-domainname'),'fa-caret-up': (vm.sortBy=='domainname')}"></span>
+                                        </th>
+                                        -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="p in  vm.filtered = (vm.records.records | filter:vm.filterObj | filter:vm.searchText ) | orderBy: vm.sortBy | startFrom:(vm.currentPage-1)*vm.entryLimit | limitTo:vm.entryLimit " ng-class="{selected: p.trSelected}" ng-click="vm.selectRow(p.recordIndex,p)">
+                                       
+                                        <td><a >{{p.id}}</a></td>
+                                        <td ng-repeat="field in vm.catalogs.recordSchema" ng-show="field.path!='id'">
+                                            <span ng-show="field.fieldType=='Date'">{{p[field.path]|date}}</span>
+                                            <span ng-show="field.fieldType!='Date'">{{p[field.path]}}</span>
+                                        </td>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="widget-foot">
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" ng-show="!vm.showRows">
+                    <h3>No Records Loaded</h3>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <script type="text/ng-template" id="viewModal.html">
+        <div class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">View Record</h4>
+              </div>
+              <div class="modal-body">
+                <p>body</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" ng-click="close('No')" class="btn btn-default" data-dismiss="modal">No</button>
+                <button type="button" ng-click="close('Yes')" class="btn btn-primary" data-dismiss="modal">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </script>
+
+
+    <script type="text/ng-template" id="updateModal.html">
+        <div class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" ng-click="console.log('weee');alert('Hi!');">{{modalTitle}}</h4>
+              </div>
+              <div class="modal-body">
+                <span ng-show="!isProcessing">
+                <form  >
+<div class="col-md-12"><label for="id">id</label><input  type="text" name="id" ng-model="selectedRecord.id" disabled="disabled"></div>
+<div class="col-md-12"><label for="location">location</label><select name="location" ng-model="selectedRecord.location" > 
+<option ng-repeat="opt in catalogs.locations" value="{{opt}}">{{opt}}</option> 
+</select></div>
+<div class="col-md-12"><label for="statusDate">statusDate</label><input ng-disabled="!canEdit" type="date" name="statusDate" ng-model="selectedRecord.status_date"></div>
+
+<div class="col-md-12"><label for="system">system</label><input ng-disabled="!canEdit" type="text" name="system" ng-model="selectedRecord.system"></div>
+<div class="col-md-12"><label for="physicalhost">physicalhost</label><input ng-disabled="!canEdit" type="text" name="physicalhost" ng-model="selectedRecord.physicalhost"></div>
+<div class="col-md-12"><label for="physvirtual">physvirtual</label><select name="physvirtual" ng-model="selectedRecord.physvirtual"><option value="P">Physical</option><option value="V">Virtual</option></select></div>
+<div class="col-md-12"><label for="osversion">osversion</label><select name="osversion" ng-model="selectedRecord.os" >
+    <option ng-repeat="opt in catalogs.versions" value="{{opt}}">{{opt}}</option> 
+    </select></div>
+<div class="col-md-12"><label for="owner">owner</label><select name="owner" ng-model="selectedRecord.owner" >
+<option ng-repeat="opt in catalogs.owners" value="{{opt}}">{{opt}}</option> 
+ </select></div>
+<div class="col-md-12"><label for="isATO">isATO</label><select name="isATO" ng-model="selectedRecord.ato"><option value="0">No</option><option value="1">Yes</option></select></div>
+<div class="col-md-12"><label for="isSplunk">isSplunk</label><select name="isSplunk" ng-model="selectedRecord.isSplunk"><option value="0">FALSE</option><option value="1">TRUE</option></select></div>
+<div class="col-md-12"><label for="isAutoDiscovery">isAutoDiscovery</label><select name="isAutoDiscovery" ng-model="selectedRecord.isAutoDiscovery"><option value="0">No</option><option value="1">Yes</option></select></div>
+<div class="col-md-12" ng-repeat="field in modalFields">
+    <label for="field.path">{{field.path}}</label>
+    <input type="text" name="{{field.path}}" ng-model="selectedRecord[field.path]" ng-disabled="!canEdit">
+</div>
+
+<div class="col-md-12"><label for="createDate">createDate</label><input  type="date" name="createDate" disabled="disabled" ng-model="selectedRecord.create_date"></div>
+<div class="col-md-12"><label for="destroyDate">destroyDate</label><input ng-disabled="canEdit==false" type="date" name="destroyDate" ng-model="selectedRecord.destroy_date"></div>
+                </form>
+                </span>
+                <span ng-show="isProcessing">
+                Loading
+                </span>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" id='modal-cancel' ng-click="close('No')" class="btn btn-warning" data-dismiss="modal">{{cancelText}}</button>
+                <button type="button" ng-click="saveRecord()" ng-show="canEdit" class="btn btn-primary" >{{confirmUpdateText}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </script>
+
+
+</section>

@@ -1,0 +1,13 @@
+<div ng-controller="ShellController as vm">
+    <header class="clearfix">
+       <div ng-include="'app/layout/ht-top-nav.html'"></div>
+    </header>
+    <section id="content" class="content">
+        <div ng-include="'app/layout/sidebar.html'" ng-show="vm.loggedIn"></div>
+
+        <div ui-view class="shuffle-animation" ng-show="vm.loggedIn"></div>
+
+        <div  ng-include="'app/layout/login.html'"  ng-show="!vm.loggedIn"></div>
+
+    </section>
+</div>
