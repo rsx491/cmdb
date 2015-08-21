@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - dashboard/dashboard.controller.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>dashboard/dashboard.controller.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">61.95</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">855</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">95.50</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">5.60</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">(function () {
+
+    &#039;use strict&#039;;
+
+
+
+    angular
+
+        .module(&#039;app.dashboard&#039;)
+
+        .controller(&#039;ModalController&#039;, ModalController);
+
+    ModalController.$inject = [&#039;$scope&#039;];
+
+  function ModalController($scope, close) {
+
+         
+
+         $scope.isProcessing = false;
+
+         $scope.selectedRecord = {};
+
+    }
+
+
+
+    angular.module(&#039;app.dashboard&#039;).filter(&#039;startFrom&#039;, function() {
+
+        return function(input, start) {
+
+            if(input) {
+
+                start = +start;
+
+                return input.slice(start);
+
+            }
+
+            return [];
+
+        }
+
+    });
+
+
+
+
+
+    var modalGetRecord = function($scope, dataservice) {
+
+        $scope.isProcessing = true;
+
+        return dataservice.getRecord($scope.selectedId).then(function (data){
+
+                $scope.selectedRecord = data[0];
+
+                $scope.isProcessing = false;
+
+                $scope.selectedRecord.status_date = new Date($scope.selectedRecord.status_date);
+
+                $scope.selectedRecord.create_date = new Date($scope.selectedRecord.create_date);
+
+                $scope.selectedRecord.destroy_date = new Date($scope.selectedRecord.destroy_date);
+
+                $scope.selectedRecord.isSplunk = ($scope.selectedRecord.isSplunk?1:0);
+
+                $scope.selectedRecord.isAutoDiscovery = ($scope.selectedRecord.isAutoDiscovery?1:0);
+
+                $scope.selectedRecord.isATO = ($scope.selectedRecord.isATO?1:0);
+
+                return $scope.selectedRecord;
+
+            });
+
+    };
+
+
+
+    var modalSaveRecord = function($scope, dataservice, cb) {
+
+        $scope.isProcessing = true;
+
+        return dataservice.postRecord($scope.selectedRecord).then(function (data){
+
+            console.log(&quot;Post finished&quot;,data);
+
+            if(data &amp;&amp; data.id){
+
+                data.trClass=&quot;&quot;; data.trSelected = false;
+
+                if(data.create_date) data.create_date = new Date(data.create_date);
+
+                if(data.destroy_date) data.destroy_date = new Date(data.destroy_date);
+
+                if(data.status_date) data.status_date = new Date(data.status_date);
+
+                
+
+                var ds = angular.element(&#039;#dashboard-view&#039;).scope();
+
+                data.recordIndex = ds.vm.records.records.length;
+
+                ds.vm.records.records.push(data);
+
+                angular.element(&#039;div.modal&#039;).modal(&#039;hide&#039;);  
+
+            }
+
+            $scope.isProcessing = false;
+
+        });
+
+    };
+
+
+
+
+
+
+
+    angular
+
+        .module(&#039;app.dashboard&#039;)
+
+        .controller(&#039;DashboardController&#039;, DashboardController);
+
+
+
+    DashboardController.$inject = [&#039;$q&#039;, &#039;dataservice&#039;, &#039;logger&#039;, &#039;ModalService&#039;];
+
+    /* @ngInject */
+
+    function DashboardController($q, dataservice, logger, ModalService) {
+
+        var vm = this;
+
+        vm.messageCount = 0;
+
+        vm.records = [];
+
+        vm.title = &#039;All Records&#039;;
+
+        vm.showRows = true;
+
+        vm.selectedId = false;
+
+        vm.selectedIndex = false;
+
+        vm.currentPage = 1;
+
+        vm.maxSize = 5;
+
+        vm.entryLimit = 30;
+
+        vm.noOfPages = 1;
+
+        vm.catalogs = {};
+
+        vm.pages = [];
+
+        vm.sortBy = &#039;status_date&#039;;
+
+        vm.showEntriesSelection = 30;
+
+        vm.disableButtons=&quot;disabled&quot;;
+
+        $q.searchText = &#039;&#039;;
+
+        $q.showEntriesSelection = &#039;all&#039;;
+
+        vm.filterObj = &quot;&quot;;
+
+        vm.filtered = []; 
+
+        vm.loggedIn = false;
+
+        vm.showPages = false;
+
+        vm.modalFields = [];
+
+        vm.modalHardcoded = { id:true,location:true,status_date:true,system:true,physicalhost:true,physvirtual:true,_v:true,os:true,ato:true,owner:true,splunk:true,auto_discovery:true,create_date:true,destroy_date:true};
+
+
+
+        //activate();
+
+
+
+        vm.activate = function() {
+
+            vm.loggedIn = true;
+
+            if(vm.records.length &lt; 1) {
+
+                var promises = [getMessageCount(), getPeople(), getCatalogs()];
+
+                return $q.all(promises).then(function() {
+
+                    //logger.info(&#039;Activated Dashboard View&#039;);
+
+                });
+
+            }
+
+        };
+
+
+
+        function getMessageCount() {
+
+            return dataservice.getMessageCount().then(function (data) {
+
+                vm.messageCount = data;
+
+                return vm.messageCount;
+
+            });
+
+        }
+
+
+
+        function getCatalogs() {
+
+            return dataservice.getCatalogs().then(function (data) {
+
+                vm.catalogs = data;
+
+                for(var i in vm.catalogs.recordSchema){
+
+                    if(!vm.modalHardcoded[vm.catalogs.recordSchema[i].path]){
+
+                        vm.modalFields.push(vm.catalogs.recordSchema[i]);
+
+                    }
+
+                }
+
+                return vm.catalogs;
+
+            });
+
+        }
+
+
+
+
+
+        function getPeople() {
+
+            return dataservice.getRecords().then(function (data) {
+
+                data.records = data.records.map(function(o,i){
+
+                    o.trClass=&quot;&quot;; o.trSelected = false;
+
+                    if(o.create_date) o.create_date = new Date(o.create_date);
+
+                    if(o.destroy_date) o.destroy_date = new Date(o.destroy_date);
+
+                    if(o.status_date) o.status_date = new Date(o.status_date);
+
+                    o.recordIndex = i;
+
+                    return o;
+
+                });
+
+                vm.records = data;
+
+                if(data.records.length&gt;0){
+
+                    vm.showRows = true;
+
+                }
+
+                vm.noOfPages = Math.ceil(data.records.length/vm.entryLimit);
+
+                vm.updatePagination();
+
+                return vm.records;
+
+            });
+
+        }
+
+
+
+        vm.toggleSort = function(fieldName) {
+
+            if(vm.sortBy == fieldName ) {
+
+                vm.sortBy = &#039;-&#039;+fieldName;
+
+            } else if( vm.sortBy.indexOf(0)==&#039;-&#039; &amp;&amp; vm.sortBy.substr(1)==fieldName) {
+
+                vm.sortBy = fieldName;
+
+            } else {
+
+                vm.sortBy = fieldName;
+
+            }
+
+        };
+
+
+
+        vm.selectRow = function(recordIndex,p) {
+
+            //recordIndex = recordIndex+(vm.currentPage-1)*vm.entryLimit;
+
+            if(vm.selectedIndex == recordIndex) { return; }
+
+            if(vm.selectedIndex){
+
+                vm.records.records[vm.selectedIndex].trClass=&quot;&quot;;
+
+                vm.records.records[vm.selectedIndex].trSelected = false;
+
+            }
+
+            if(vm.lastTr) {
+
+                vm.lastTr.trSelected = false;
+
+            }
+
+            vm.lastTr = p;
+
+            vm.selectedIndex = recordIndex;
+
+            vm.records.records[vm.selectedIndex].trClass=&quot;selected&quot;;
+
+            vm.records.records[vm.selectedIndex].trSelected = true;
+
+            vm.selectedId = vm.records.records[vm.selectedIndex]._id;
+
+            vm.selectedRecord = null;
+
+            p.trSelected = true;
+
+            vm.disabledButtons=&quot;&quot;;
+
+            console.log(&quot;Selected record id &quot;+vm.records.records[vm.selectedIndex].id);
+
+
+
+        };
+
+
+
+        vm.showEntries = function() {
+
+            if(vm.showEntriesSelection==&quot;all&quot;){
+
+                vm.entryLimit = 200;
+
+            } else {
+
+                vm.entryLimit = parseInt(vm.showEntriesSelection);
+
+            }
+
+        };
+
+
+
+        vm.searchChanged = function() {
+
+            
+
+        };
+
+
+
+        vm.updatePaginationApplied = function($scope) {
+
+            $scope.$apply(function(){
+
+                vm.pages = [];
+
+                if(vm.filtered) {
+
+                    vm.noOfPages = Math.ceil( vm.filtered.length / vm.showEntriesSelection);
+
+                    if( vm.noOfPages &lt; 2) {
+
+                        vm.showPages = false;
+
+                        return;
+
+                    }
+
+                }
+
+                vm.showPages = true;
+
+                vm.pages.push({
+
+                    label:&quot;First&quot;,
+
+                    active: false,
+
+                    disabled: (vm.currentPage&lt;=1?true:false),
+
+                    number : 1
+
+                });
+
+                vm.pages.push({
+
+                    label:&quot;&lt;&lt;&quot;,
+
+                    active:false,
+
+                    disabled: (vm.currentPage&lt;=1?true:false),
+
+                    number: (vm.currentPage&gt;1?vm.currentPage-1:1)
+
+                });
+
+                for(var i=vm.currentPage-1;i&lt;vm.currentPage+3;i++){
+
+                    if(i &lt; 1 || i &gt; vm.noOfPages) continue;
+
+                    vm.pages.push({
+
+                        label: i,
+
+                        active: (i==vm.currentPage?true:false),
+
+                        disabled: (i==vm.currentPage?true:false),
+
+                        number: i
+
+                    });
+
+                };
+
+                vm.pages.push({
+
+                    label:&quot;&gt;&gt;&quot;,
+
+                    active:false,
+
+                    disabled: (vm.currentPage&gt;=vm.noOfPages?true:false),
+
+                    number: (vm.currentPage&lt;vm.noOfPages?vm.currentPage+1:vm.currentPage)
+
+                });
+
+                vm.pages.push({
+
+                    label:&quot;Last&quot;,
+
+                    active: false,
+
+                    disabled: (vm.currentPage&gt;=vm.noOfPages?true:false),
+
+                    number: vm.noOfPages
+
+                });
+
+            });
+
+        };
+
+         vm.updatePagination = function() {
+
+                vm.pages = [];
+
+                if(vm.filtered) {
+
+                    vm.noOfPages = Math.ceil( vm.filtered.length / vm.showEntriesSelection);
+
+                    if( vm.noOfPages &lt; 2) {
+
+                        vm.showPages = false;
+
+                        return;
+
+                    }
+
+                }
+
+                vm.showPages = true;
+
+                vm.pages.push({
+
+                    label:&quot;First&quot;,
+
+                    active: false,
+
+                    disabled: (vm.currentPage&lt;=1?true:false),
+
+                    number : 1
+
+                });
+
+                vm.pages.push({
+
+                    label:&quot;&lt;&lt;&quot;,
+
+                    active:false,
+
+                    disabled: (vm.currentPage&lt;=1?true:false),
+
+                    number: (vm.currentPage&gt;1?vm.currentPage-1:1)
+
+                });
+
+                for(var i=vm.currentPage-1;i&lt;vm.currentPage+3;i++){
+
+                    if(i &lt; 1 || i &gt; vm.noOfPages) continue;
+
+                    vm.pages.push({
+
+                        label: i,
+
+                        active: (i==vm.currentPage?true:false),
+
+                        disabled: (i==vm.currentPage?true:false),
+
+                        number: i
+
+                    });
+
+                };
+
+                vm.pages.push({
+
+                    label:&quot;&gt;&gt;&quot;,
+
+                    active:false,
+
+                    disabled: (vm.currentPage&gt;=vm.noOfPages?true:false),
+
+                    number: (vm.currentPage&lt;vm.noOfPages?vm.currentPage+1:vm.currentPage)
+
+                });
+
+                vm.pages.push({
+
+                    label:&quot;Last&quot;,
+
+                    active: false,
+
+                    disabled: (vm.currentPage&gt;=vm.noOfPages?true:false),
+
+                    number: vm.noOfPages
+
+                });
+
+            
+
+        };
+
+
+
+        vm.selectPage = function(pageNum) {
+
+            vm.currentPage = pageNum;
+
+            vm.updatePagination();
+
+        };
+
+
+
+        //have to manually insert bindings into the scope because this modal library breaks it
+
+        vm.bindModal = function(modal, recordID){
+
+            var selectedRecord = recordID;
+
+            var modalTitle = (recordID != -1 ) ? &#039;Update Record&#039; : &#039;Create Record&#039;;
+
+            var confirmUpdateText = (recordID!=-1) ? &#039;Update&#039; : &#039;Save&#039;;
+
+            modal.scope.modalTitle = modalTitle;
+
+            modal.scope.confirmUpdateText = confirmUpdateText;
+
+            modal.scope.selectedId = recordID;
+
+            modal.scope.catalogs = vm.catalogs;
+
+            modal.scope.canEdit = true;
+
+            modal.scope.cancelText = &quot;Cancel&quot;;
+
+            modal.scope.modalFields = vm.modalFields;
+
+            modal.scope.saveRecord = function(){modalSaveRecord(modal.scope, dataservice);};
+
+            modal.scope.getRecord = function(){modalGetRecord(modal.scope, dataservice);};
+
+
+
+            if(recordID != -1 ) {
+
+                modal.scope.getRecord();
+
+            } else {
+
+                modal.scope.selectedRecord = {};
+
+            }
+
+            
+
+            modal.element.modal();
+
+        };
+
+
+
+        vm.update = function(recordID) {
+
+            
+
+            ModalService.showModal({
+
+                templateUrl: &#039;updateModal.html&#039;,
+
+                controller: &#039;ModalController&#039;
+
+            }).then(function(modal){
+
+                vm.bindModal(modal, recordID);
+
+                
+
+            });
+
+        };
+
+
+
+        vm.view = function(recordID) {
+
+            ModalService.showModal({
+
+                templateUrl: &#039;updateModal.html&#039;,
+
+                controller: &#039;ModalController&#039;
+
+            }).then(function(modal){
+
+                modal.scope.modalTitle = &quot;View Record&quot;;
+
+                modal.scope.confirmUpdateText = &quot;Close&quot;;
+
+                modal.scope.selectedId = recordID;
+
+                modal.scope.catalogs = vm.catalogs;
+
+                modal.scope.modalFields = vm.modalFields;
+
+                modal.scope.canEdit = false; 
+
+                modal.scope.cancelText = &quot;Close&quot;;
+
+                modal.scope.getRecord = function(){modalGetRecord(modal.scope, dataservice);};
+
+                modal.scope.getRecord();
+
+                modal.element.modal();
+
+                modal.close.then(function(result){
+
+                    
+
+                });
+
+            });
+
+        };
+
+
+
+        vm.toggleShowLatest = function(){
+
+            if(!vm.showSingle) return;
+
+            if(vm.entryLimit==1){
+
+                vm.entryLimit = vm.showEntriesSelection;
+
+                vm.showPages = true;
+
+                vm.updatePagination();
+
+            } else {
+
+                vm.entryLimit = 1;
+
+                vm.showPages = false;
+
+            }
+
+        };
+
+
+
+        //tree node selected, update data to filter by selection
+
+        vm.nodeSelected = function($scope, node) {
+
+            $scope.$apply(function(){
+
+                if(!node.li_attr||!node.li_attr.apiType){
+
+                    vm.filterObj = {};
+
+                    return;
+
+                }
+
+                vm.currentPage = 1;
+
+                vm.selectedRecord = null; vm.selectedId = false; vm.selectedIndex = null;
+
+                if(vm.lastTr) {
+
+                    vm.lastTr.trSelected = false;
+
+                }
+
+                var node_id = (node.li_attr.id==&quot;null&quot;?null:node.li_attr.id);
+
+                
+
+                if(node.li_attr.apiType==&quot;os&quot;) {
+
+                    vm.entryLimit = vm.showEntriesSelection;
+
+                    vm.showSingle=false;
+
+                    vm.updatePagination();
+
+                    vm.filterObj = {
+
+                        &quot;os&quot; : node_id
+
+                    };
+
+                } else if(node.li_attr.apiType==&quot;os_system&quot;) {
+
+                    vm.entryLimit =1;
+
+                    vm.showSingle=true;
+
+                    vm.showPages = false;
+
+                    vm.filterObj = {
+
+                        &quot;os&quot; : node.li_attr.filter_os,
+
+                        &quot;system&quot; : node.li_attr.filter_system
+
+                    };
+
+                    vm.sortBy=&quot;-status_date&quot;;
+
+                } else if(node.li_attr.apiType==&quot;owner&quot;) {
+
+                    vm.entryLimit = vm.showEntriesSelection;
+
+                    vm.showSingle=false;
+
+                    vm.updatePagination();
+
+                    vm.filterObj = {
+
+                        &quot;owner&quot; : (!node_id||node_id==&quot;null&quot;?null:node_id),
+
+                    };
+
+                }
+
+                else if(node.li_attr.apiType==&quot;location&quot;) {
+
+                    vm.entryLimit = vm.showEntriesSelection;
+
+                    vm.showSingle=false;
+
+                    vm.updatePagination();
+
+                    vm.filterObj = {
+
+                        &quot;location&quot; : node_id
+
+                    };
+
+
+
+                }
+
+                else if(node.li_attr.apiType==&quot;location_physicalhost&quot;) {
+
+                    vm.entryLimit = 1;
+
+                    vm.showPages = false;
+
+                    vm.showSingle=true;
+
+                    vm.filterObj = {
+
+                        &quot;location&quot; : node.li_attr.filter_location,
+
+                        &quot;physicalhost&quot; : node.li_attr.filter_physicalhost
+
+                    };
+
+                    vm.sortBy=&quot;-status_date&quot;;
+
+                } else {
+
+                    vm.filterObj = {};
+
+                }
+
+                //$scope.$apply(function(){
+
+                    setTimeout(function(){
+
+                        vm.updatePaginationApplied($scope);
+
+                    },150);
+
+                    
+
+                //});
+
+            });
+
+        };        
+
+
+
+
+
+    }
+
+
+
+    
+
+
+
+
+
+})();</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

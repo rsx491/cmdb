@@ -14,7 +14,12 @@
     -webkit-text-shadow: none !important;
     -ms-text-shadow: none !important;
     text-shadow: none !important;*/
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    /*font-family: "Segoe UI", Arial, Helvetica, sans-serif;*/
+    /*font-family: 'Lato',sans-serif;*/
+    font-size: 14px;
+    line-height: 30px;
+    font-family: 'trebuchet MS','Lucida sans',Arial;
+    font-size: 14px;
     -webkit-font-smoothing: antialiased;
     /*font-weight: 400;*/
 }
@@ -97,9 +102,11 @@ input[type="radio"], input[type="checkbox"] {
     }
 
 body {
+	/*
     font-size: 13px;
     line-height: 23px;
     color: #666;
+    */
     background: #111;
     -webkit-font-smoothing: antialiased;
     margin: 0px;
@@ -696,7 +703,7 @@ form > div > select {
 /* Sidebar */
 
 .sidebar {
-    width: 300px;
+    width: 400px;
     float: left;
     display: block;
     background: #111;
@@ -743,12 +750,12 @@ form > div > select {
         color: #fff;
         text-decoration: none;
         border-bottom: 1px solid #222;
-        background-color: #111;
+        //background-color: #111;
     }
 
         .sidebar .navi > li > a:hover, .sidebar .navi > li.open > a {
             border-bottom: 1px solid #222;
-            background-color: #222;
+            //background-color: #222;
             color: #fff;
         }
 
@@ -996,115 +1003,75 @@ ul.user-buttons li {
 /* Widget */
 
 .widget {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    background: #fff;
+   border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px #CCCCCC;
 }
 
-    .widget hr {
-        margin: 4px 0;
-        padding: 4px 0;
-        border-top: 0;
-        border-bottom: 1px solid #ddd;
-    }
+.widget table {
+	border-spacing: 0;
+	width: 100%;
+}
+        
+.widget th:first-child {
+    border-radius: 6px 0 0;
+}
 
-    .widget .table {
-        margin: 0;
-        width: 100%;
-    }
+.widget td:first-child, .widget th:first-child {
+    border-left: medium none;
+}
 
-    .widget .table-bordered {
-        border: 0;
-    }
+.widget th {
+    background-color: #DCE9F9;
+    background-image: -moz-linear-gradient(center top , #EBF3FC, #DCE9F9);
+    border-top: medium none;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
 
-        .widget .table-bordered th {
-            border-bottom: 1px solid #ccc !important;
-        }
-
-        .widget .table-bordered td {
-            border-top: 0 !important;
-            border-bottom: 1px solid #ccc !important;
-        }
-
-            .widget .table-bordered td:first-child, .widget .table-bordered th:first-child {
-                border-left: 0;
-            }
-
-    .widget .padd {
-        padding: 15px;
-    }
-
-    .widget .widget-head {
-        background-color: #f5f5f5;
-        border: 1px solid #ddd;
-        color: #777;
-        font-size: 18px;
-        padding: 12px 15px;
-    }
-
-        .widget .widget-head .widget-icons i {
-            font-size: 14px;
-            margin: 0 4px;
-        }
-
-        .widget .widget-head .widget-icons a {
-            color: #aaa;
-        }
-
-            .widget .widget-head .widget-icons a:hover {
-                color: #888;
-            }
-
-    .widget .widget-content {
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .widget .widget-foot {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-top: 0;
-        padding: 8px 15px;
-        font-size: 13px;
-        color: #555;
-    }
+.widget td, .widget th {
+    border-left: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    padding: 10px;
+    text-align: left;
+}          
+     
 
     /* Widget colors */
 
     .widget.wred .widget-head {
         background-color: @color_important;
-        border: 1px solid @color_important;
+        //border: 1px solid @color_important;
         color: #fff;
     }
 
     .widget.wlightblue .widget-head {
         background-color: @color_lightblue;
-        border: 1px solid @color_lightblue;
+        //border: 1px solid @color_lightblue;
         color: #fff;
     }
 
     .widget.wblue .widget-head {
         background-color: @color_blue;
-        border: 1px solid @color_blue;
+        //border: 1px solid @color_blue;
         color: #fff;
     }
 
     .widget.wgreen .widget-head {
         background-color: @color_success;
-        border: 1px solid @color_success;
+        //border: 1px solid @color_success;
         color: #fff;
     }
 
     .widget.worange .widget-head {
         background-color: @color_warning;
-        border: 1px solid @color_warning;
+        //border: 1px solid @color_warning;
         color: #fff;
     }
 
     .widget.wviolet .widget-head {
         background-color: @color_violet;
-        border: 1px solid @color_violet;
+        //border: 1px solid @color_violet;
         color: #fff;
     }
 
@@ -1462,7 +1429,7 @@ body {
 }
 
 .navbar-inverse {
-    background-color: #333;
+    background-color: #48A5FF;
 }
 
 .sidebar-widget form {
@@ -1498,7 +1465,7 @@ body {
 }
 
     .sidebar .sidebar-inner {
-        background-color: #333;
+        background-color: #48A5FF;
     }
 
 .sidebar-filler {
@@ -1507,7 +1474,7 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    background-color: #333;
+    background-color: #48A5FF;
     width: 300px;
 }
 
@@ -1655,7 +1622,7 @@ small {
 }
 
 .widget-content {
-    padding: 1em;
+    //padding: 1em;
     margin: 0;
     overflow: auto;
 }
@@ -1669,7 +1636,7 @@ small {
 .navbar .navbar-brand {
     /*background: url(../images/gg.png) no-repeat left top !important;*/
     margin: 0 1em;
-    height: 45px;
+    height: 10%;
 }
 
 .navbar .brand-title {
