@@ -1,5 +1,4 @@
 var args = require('yargs').argv;
-var browserSync = require('browser-sync');
 var config = require('./gulp.config')();
 var del = require('del');
 var glob = require('glob');
@@ -17,7 +16,6 @@ var port = process.env.PORT || config.defaultPort;
  * Example: gulp serve-dev
  *
  * --verbose  : Various tasks will produce more output to the console.
- * --nosync   : Don't launch the browser with browser-sync when serving code.
  * --debug    : Launch debugger with node-inspector.
  * --debug-brk: Launch debugger and break on 1st line with node-inspector.
  * --startServers: Will start servers for midway tests on the test task.
@@ -452,13 +450,11 @@ function serve(isDev, specRunner) {
             log('*** nodemon restarted');
             log('files changed:\n' + ev);
             setTimeout(function() {
-                browserSync.notify('reloading now ...');
-                browserSync.reload({stream: false});
+                
             }, config.browserReloadDelay);
         })
         .on('start', function () {
             log('*** nodemon started');
-            startBrowserSync(isDev, specRunner);
         })
         .on('crash', function () {
             log('*** nodemon crashed: script crashed for some reason');
@@ -487,54 +483,7 @@ function runNodeInspector() {
     exec('node-inspector');
 }
 
-/**
- * Start BrowserSync
- * --nosync will avoid browserSync
- */
-function startBrowserSync(isDev, specRunner) {
-    if (args.nosync || browserSync.active) {
-        return;
-    }
 
-    log('Starting BrowserSync on port ' + port);
-
-    // If build: watches the files, builds, and restarts browser-sync.
-    // If dev: watches less, compiles it to css, browser-sync handles reload
-    if (isDev) {
-        gulp.watch([config.less], ['styles'])
-            .on('change', changeEvent);
-    } else {
-        gulp.watch([config.less, config.js, config.html], ['optimize','copyLibs', browserSync.reload])
-            .on('change', changeEvent);
-    }
-
-    var options = {
-        proxy: 'localhost:' + port,
-        port: 3000,
-        files: isDev ? [
-            config.client + '**/*.*',
-            '!' + config.less,
-            config.temp + '**/*.css'
-        ] : [],
-        ghostMode: { // these are the defaults t,f,t,t
-            clicks: true,
-            location: false,
-            forms: true,
-            scroll: true
-        },
-        injectChanges: true,
-        logFileChanges: true,
-        logLevel: 'debug',
-        logPrefix: 'gulp-patterns',
-        notify: true,
-        reloadDelay: 0 //1000
-    } ;
-    if (specRunner) {
-        options.startPath = config.specRunnerFile;
-    }
-
-    browserSync(options);
-}
 
 /**
  * Start Plato inspector and visualizer

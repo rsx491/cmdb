@@ -1,10 +1,6 @@
 # cmdb
 
-**Generated from HotTowel Angular**
-
->*Opinionated AngularJS style guide for teams by [@john_papa](//twitter.com/john_papa)*
-
->More details about the styles and patterns used in this app can be found in my [AngularJS Style Guide](https://github.com/johnpapa/angularjs-styleguide) and my [AngularJS Patterns: Clean Code](http://jpapa.me/ngclean) course at [Pluralsight](http://pluralsight.com/training/Authors/Details/john-papa) and working in teams. 
+**How to install and run the CMDB node app**
 
 ## Prerequisites
 
@@ -12,28 +8,14 @@
  - on OSX use [homebrew](http://brew.sh) `brew install node`
  - on Windows use [chocolatey](https://chocolatey.org/) `choco install nodejs`
 
-2. Install Yeoman `npm install -g yo`
-
-3. Install these NPM packages globally
+2. Install these NPM packages globally
 
     ```bash
     npm install -g bower gulp nodemon`
     ```
 
-    >Refer to these [instructions on how to not require sudo](https://github.com/sindresorhus/guides/blob/master/npm-global-without-sudo.md)
-
-## Running HotTowel
-
-### Linting
- - Run code analysis using `gulp vet`. This runs jshint, jscs, and plato.
-
-### Tests
- - Run the unit tests using `gulp test` (via karma, mocha, sinon).
-
 ### Running in dev mode
- - Run the project with `gulp serve-dev --sync`
-
- - `--sync` opens it in a browser and updates the browser with any files changes.
+ - Run the project with `gulp serve-dev`
 
 ### Building the project
  - Build the optimized project using `gulp build`
@@ -42,16 +24,28 @@
 ### Running the optimized code
  - Run the optimize project from the build folder with `gulp serve-build`
 
-## Exploring HotTowel
-HotTowel Angular starter project
+### Importing JSON record files
+ - Run 'node ./src/server/load_batch.js  location_of_json_file' in order to import a json file full of records. 
+ - The fields in the records will be parsed and stored in order to accomodate any fields not predefined in the record model
 
 ### Structure
-The structure also contains a gulpfile.js and a server folder. The server is there just so we can serve the app using node. Feel free to use any server you wish.
+The structure also contains a gulpfile.js and a server folder. 
 
 	/src
 		/client
 			/app
-			/content
+			/images
+			/libs
+			/styles
+			index.html  <- client entry point
+		/server
+			/controllers  <-- main CRUD controller
+			/models   <-- mongoose database models
+			/utils    <-- 404 error page
+			routes.js
+			config.js
+			app.js  <- server entry point
+			db.js
 	
 ### Installing Packages
 When you generate the project it should run these commands, but if you notice missing pavkages, run these again:
@@ -66,7 +60,7 @@ The app has 4 feature modules and depends on a series of external modules and cu
 app --> [
         app.admin,
         app.dashboard,
-        app.layout,
+        app.layout, 
         app.widgets,
 		app.core --> [
 			ngAnimate,
@@ -78,6 +72,15 @@ app --> [
 		]
     ]
 ```
+
+## layout/shell Module
+Encloses the top nav, login/splash screen and sidebar
+
+### dashboard Module
+The primary module for the data table and record modals
+
+### layout/sidebar
+Initiates jstree based listing, calls dashboard for click events
 
 #### core Module
 Core modules are ones that are shared throughout the entire application and may be customized for the specific application. Example might be common data services.
