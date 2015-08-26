@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 
 var RecordSchema = new Schema({
 	id: { type: Number }, //int
-	status_date: { type: Date, required: true },
+	status_date: { type: Date, default: Date.now },
 	location: {type: String  },
 	system: { type: String },
 	physicalhost: { type: String },
@@ -31,9 +31,9 @@ var RecordSchema = new Schema({
 	notes: String, */
 	create_date: { type:Date, default: Date.now},
 	destroy_date: Date,
-	isSplunk: Boolean,
-	isAutoDiscovery: Boolean
-}, { strict: false });
+	splunk: Boolean,
+	auto_discovery: Boolean
+}, { strict: true, versionKey: false });
 
 
 RecordSchema.post('save', function(next){

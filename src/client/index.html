@@ -15,8 +15,8 @@
     <!-- build:css styles/lib.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="/bower_components/toastr/toastr.css" />
     <link rel="stylesheet" href="/bower_components/ng-table/ng-table.css" />
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -52,20 +52,21 @@
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
     <script src="/bower_components/angular/angular.js"></script>
-    <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="/bower_components/angular-resource/angular-resource.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="/bower_components/extras.angular.plus/ngplus-overlay.js"></script>
-    <script src="/bower_components/moment/moment.js"></script>
-    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="/bower_components/toastr/toastr.js"></script>
     <script src="/bower_components/angular-animate/angular-animate.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="/bower_components/ng-table/ng-table.js"></script>
     <script src="/bower_components/api-check/dist/apiCheck.js"></script>
     <script src="/bower_components/angular-formly/dist/formly.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js"></script>
     <script src="/bower_components/angular-modal-service/dst/angular-modal-service.js"></script>
+    <script src="/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+    <script src="/bower_components/jwt-decode/build/jwt-decode.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script src="/bower_components/ng-table/ng-table.js"></script>
+    <script src="/bower_components/toastr/toastr.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -75,7 +76,6 @@
     <script src="/src/client/app/blocks/exception/exception.module.js"></script>
     <script src="/src/client/app/blocks/logger/logger.module.js"></script>
     <script src="/src/client/app/blocks/router/router.module.js"></script>
-    <script src="/src/client/app/cm/cm.client.module.js"></script>
     <script src="/src/client/app/core/core.module.js"></script>
     <script src="/src/client/app/dashboard/dashboard.module.js"></script>
     <script src="/src/client/app/layout/layout.module.js"></script>
@@ -84,10 +84,6 @@
     <script src="/src/client/app/blocks/exception/exception.js"></script>
     <script src="/src/client/app/blocks/logger/logger.js"></script>
     <script src="/src/client/app/blocks/router/router-helper.provider.js"></script>
-    <script src="/src/client/app/cm/config/cm.client.routes.js"></script>
-    <script src="/src/client/app/cm/controllers/cm.client.controller.js"></script>
-    <script src="/src/client/app/cm/services/cm.client.service.js"></script>
-    <script src="/src/client/app/cm/services/cm.form.client.service.js"></script>
     <script src="/src/client/app/core/config.js"></script>
     <script src="/src/client/app/core/constants.js"></script>
     <script src="/src/client/app/core/core.route.js"></script>
@@ -113,5 +109,7 @@
     <script src="/libs/jstree/jstree.js"></script>
     <script src="/libs/jstree-directive/jsTree.directive.js"></script>
     <script src="/libs/double-scroll-bars/double-scroll-bars.min.js"></script>
+    <script src="/libs/dalelotts-angular-bootstrap-datetimepicker/js/datetimepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="/libs/dalelotts-angular-bootstrap-datetimepicker/css/datetimepicker.css">
 </body>
 </html>

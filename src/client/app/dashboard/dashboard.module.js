@@ -4,6 +4,7 @@
     angular.module('app.dashboard', [
         'app.core',
         'app.widgets',
-        'angularModalService'
+        'angularModalService',
+        'ui.bootstrap.datetimepicker'
       ]);
 })();
