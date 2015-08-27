@@ -60,9 +60,7 @@ var CMController = {
 		if(req.body._id) {
 			delete req.body._id;
 		}
-		if(req.body.status_date) {
-			delete req.body.status_date;
-		}
+
 		var record = Record(req.body);
 		//have to fetch record counter first in order to set autoincrement id
 		Counter.find({label:'records'},function(err,docs){
@@ -73,7 +71,6 @@ var CMController = {
 			var record_count = docs[0].count;
 			record.id = docs[0].count;
 			record.create_date = new Date();
-			record.status_date = new Date();
 			record.save(function(err) {
 				if(err) {
 					res.status(500).json({msg:err});
@@ -138,7 +135,7 @@ var CMController = {
 		} else if(query_id == "locations") {
 			var agg = [
 				{$match: { location:{'$nin':[null,-1,"-1",""]} } },
-				{$group:{_id:{ location:'$location', physicalhost:'$physicalhost'}}},
+				{$group:{_id:{ location:'$location', system:'$system'}}},
 				{$group:{_id:{location:'$_id.location'}, total: {$sum:1} }}
 			];
 			Record.aggregate(agg, function(err, result){
@@ -198,8 +195,8 @@ var CMController = {
 			});
 		} else if(req.query.apiType == 'location') {
 			var agg = [
-				{$match: {location:query_id, physicalhost:{'$nin':[null,-1,'-1','']} } },
-				{$group:{_id:{ physicalhost:'$physicalhost'}, total:{$sum:1} }},
+				{$match: {location:query_id, system:{'$nin':[null,-1,'-1','']} } },
+				{$group:{_id:{ system:'$system'}, total:{$sum:1} }},
 			];
 			Record.aggregate(agg, function(err, result){
 				if(err){
@@ -208,9 +205,9 @@ var CMController = {
 				}
 				return res.json(result.map(function(o){
 					return {
-						id: o._id.physicalhost,
-						li_attr: { apiType:"location_physicalhost",clickAction:'filter', filter_location:query_id, filter_physicalhost:o._id.physicalhost },
-						text: o._id.physicalhost,
+						id: o._id.system,
+						li_attr: { apiType:"location_system",clickAction:'filter', filter_location:query_id, filter_system:o._id.system },
+						text: o._id.system,
 						children: false
 					};
 				}));

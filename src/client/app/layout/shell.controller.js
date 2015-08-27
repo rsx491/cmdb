@@ -5,9 +5,9 @@
         .module('app.layout')
         .controller('ShellController', ShellController);
 
-    ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger'];
+    ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger', '$http'];
     /* @ngInject */
-    function ShellController($rootScope, $timeout, config, logger) {
+    function ShellController($rootScope, $timeout, config, logger, $http) {
         var vm = this;
         vm.busyMessage = 'Please wait ...';
         vm.isBusy = true;
@@ -19,6 +19,29 @@
         vm.loggedIn =  false;
 
         $rootScope.doLogin = function(){
+			console.log('trying login test..');
+			var error = function(){
+				var error = 'Error: See HPC Administrator';
+				$scope.LogVal = error;
+				setTimeout(function(){
+					$scope.LogVal = 'Log In';
+					$scope.$apply();
+				}, 3000);
+			}
+
+			var config = {
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+			};
+			var postUrl = 'https://localhost/request_cert/cert_get.php';
+			
+			$http.post(postUrl, null, config)
+			.success(function() {
+				console.log('success');
+			})
+			.error(function() {
+				console.log('error');
+			});
+			
             console.log("login!");
             console.log($rootScope);
             login();
@@ -58,5 +81,6 @@
             $rootScope.showSplash = false;
             angular.element('#dashboard-view').scope().vm.activate();
         }
+
     }
 })();

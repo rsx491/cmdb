@@ -3,12 +3,16 @@
 
 var express = require('express');
 var app = express();
+var fs = require('fs');
 var bodyParser = require('body-parser');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
 var db = require('./db');
+var https = require('https');
+var http = require('http');
+var config = require('./config');
 
 var environment = process.env.NODE_ENV;
 
@@ -49,7 +53,18 @@ switch (environment){
         break;
 }
 
-app.listen(port, function() {
+var server = null;
+console.log("NOSSL: "+process.env.NOSSL);
+if( !process.env.NOSSL || process.env.NOSSL != 1) {
+    var privateKey = fs.readFileSync(config.SSLKey, 'utf8');
+    var certificate = fs.readFileSync(config.SSLCertificate, 'utf8');
+    var credentials = {key: privateKey, cert: certificate};
+    server = https.createServer(credentials, app);
+} else {
+    server = http.createServer(app);
+}
+
+server.listen(port, function() {
     console.log('Express server listening on port ' + port);
     console.log('env = ' + app.get('env') +
         '\n__dirname = ' + __dirname  +

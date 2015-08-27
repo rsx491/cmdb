@@ -10,11 +10,13 @@ var $ = require('gulp-load-plugins')({lazy: true});
 var colors = $.util.colors;
 var envenv = $.util.env;
 var port = process.env.PORT || config.defaultPort;
+console.log("args nossl: "+args.nossl);
 
 /**
  * yargs variables can be passed in to alter the behavior, when present.
  * Example: gulp serve-dev
  *
+ * --nossl    : launches on basic http
  * --verbose  : Various tasks will produce more output to the console.
  * --debug    : Launch debugger with node-inspector.
  * --debug-brk: Launch debugger and break on 1st line with node-inspector.
@@ -39,15 +41,7 @@ gulp.task('vet', function() {
         .pipe($.jshint());
 });
 
-/**
- * Create a visualizer report
- */
-gulp.task('plato', function(done) {
-    log('Analyzing source with Plato');
-    log('Browse to /report/plato/index.html to see Plato results');
 
-    startPlatoVisualizer(done);
-});
 
 /**
  * Compile less to css
@@ -469,6 +463,7 @@ function getNodeOptions(isDev) {
         script: config.nodeServer,
         delayTime: 1,
         env: {
+            'NOSSL' : args.nossl ? 1 : 0,
             'PORT': port,
             'NODE_ENV': isDev ? 'dev' : 'build'
         },
@@ -484,33 +479,6 @@ function runNodeInspector() {
 }
 
 
-
-/**
- * Start Plato inspector and visualizer
- */
-function startPlatoVisualizer(done) {
-    log('Running Plato');
-
-    var files = glob.sync(config.plato.js);
-    var excludeFiles = /.*\.spec\.js/;
-    var plato = require('plato');
-
-    var options = {
-        title: 'Plato Inspections Report',
-        exclude: excludeFiles
-    };
-    var outputDir = config.report + '/plato';
-
-    plato.inspect(files, outputDir, options, platoCompleted);
-
-    function platoCompleted(report) {
-        var overview = plato.getOverviewReport(report);
-        if (args.verbose) {
-            log(overview.summary);
-        }
-        if (done) { done(); }
-    }
-}
 
 /**
  * Start the tests using karma.
