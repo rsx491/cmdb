@@ -31,17 +31,17 @@
 
 			var config = {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-			};
-			var postUrl = 'https://localhost/request_cert/cert_get.php';
+			};			
+			var postUrl = 'https://localhost/request_cert/cert_get.php?callback=JSON_CALLBACK';
 			
-			$http.post(postUrl, null, config)
+			$http.jsonp(postUrl, null, config)
 			.success(function() {
 				console.log('success');
 			})
 			.error(function() {
 				console.log('error');
 			});
-			
+
             console.log("login!");
             console.log($rootScope);
             login();
