@@ -393,13 +393,13 @@
                     };
 
                 }
-                else if(node.li_attr.apiType=="location_physicalhost") {
+                else if(node.li_attr.apiType=="location_system") {
                     vm.entryLimit = 1;
                     vm.showPages = false;
                     vm.showSingle=true;
                     vm.filterObj = {
                         "location" : node.li_attr.filter_location,
-                        "physicalhost" : node.li_attr.filter_physicalhost
+                        "system" : node.li_attr.filter_system
                     };
                     vm.sortBy="-status_date";
                 } else {
