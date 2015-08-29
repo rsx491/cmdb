@@ -33,16 +33,10 @@
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 			};
 			var postUrl = 'https://localhost/request_cert/cmdb_cert_get.php?callback=JSON_CALLBACK';
-			
 			$http.jsonp(postUrl, null, config)
 			.success(function(data) {
-			    console.log("login!");
-			    //var logStr = new String($window.jwt_decode(data).username);
-			    //console.log(logStr);
-			    //console.log(data);
-			    var logStr = new String(data.username);
-			    $rootScope.user = logStr.replace('.', ' ');
-				//console.log($rootScope);
+				var logStr = new String($window.jwt_decode(data.token).user);
+				$rootScope.user = logStr.replace('.', ' ');
             	login();
 			})
 			.error(function() {
