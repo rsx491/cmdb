@@ -32,19 +32,19 @@
 			var config = {
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 			};			
-			var postUrl = 'https://localhost/request_cert/cert_get.php?callback=JSON_CALLBACK';
+			var postUrl = 'https://localhost/request_cert/cmdb_cert_get.php?callback=JSON_CALLBACK';
 			
 			$http.jsonp(postUrl, null, config)
-			.success(function() {
-				console.log('success');
+			.success(function(data) {
+				console.log(data);
+			        console.log("login!");
+            			console.log($rootScope);
+            			login();
 			})
 			.error(function() {
 				console.log('error');
 			});
 
-            console.log("login!");
-            console.log($rootScope);
-            login();
         };
         $rootScope.logout = function(){
             logout();
