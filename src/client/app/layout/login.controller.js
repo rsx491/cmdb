@@ -10,7 +10,5 @@
     function LoginController($scope) {
         var vm = this;
         vm.scope = $scope;
-
-        
     }
 })();

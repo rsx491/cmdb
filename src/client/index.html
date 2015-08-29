@@ -33,9 +33,6 @@
         <div ng-include="'app/layout/shell.html'"></div>
         <div id="splash-page" ng-show="showSplash">
             <div class="page-splash">
-                <div class="page-splash-message" ng-show="!showSplashLogin">
-                    CMDB
-                </div>
                 <div class="page-splash-message" ng-show="showSplashLogin">
                     <h3>Before you click Login, please make sure you have inserted your PIV Card</h3>
                     <button ng-click="doLogin()" class='.btn .btn-primary'>Login</button>
@@ -64,10 +61,10 @@
     <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="/bower_components/extras.angular.plus/ngplus-overlay.js"></script>
-    <script src="/bower_components/jwt-decode/build/jwt-decode.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src="/bower_components/ng-table/ng-table.js"></script>
     <script src="/bower_components/toastr/toastr.js"></script>
+    <script src="/bower_components/jwt-decode/build/jwt-decode.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -105,7 +102,9 @@
     <!-- inject:templates:js -->
     <!-- endinject -->
     <!-- endbuild -->
-
+    
+    <!-- JWT Headache -->
+    <script src="/libs/jwt-decode.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/libs/jstree/themes/default/style.min.css">
     <script src="/libs/jstree/jstree.js"></script>
     <script src="/libs/jstree-directive/jsTree.directive.js"></script>

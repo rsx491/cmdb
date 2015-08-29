@@ -5,9 +5,9 @@
         .module('app.layout')
         .controller('ShellController', ShellController);
 
-    ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger', '$http'];
+    ShellController.$inject = ['$rootScope', '$timeout', 'config', 'logger', '$http', '$window'];
     /* @ngInject */
-    function ShellController($rootScope, $timeout, config, logger, $http) {
+    function ShellController($rootScope, $timeout, config, logger, $http, $window) {
         var vm = this;
         vm.busyMessage = 'Please wait ...';
         vm.isBusy = true;
@@ -36,10 +36,14 @@
 			
 			$http.jsonp(postUrl, null, config)
 			.success(function(data) {
-				console.log(data);
-			        console.log("login!");
-            			console.log($rootScope);
-            			login();
+			    console.log("login!");
+			    //var logStr = new String($window.jwt_decode(data).username);
+			    //console.log(logStr);
+			    //console.log(data);
+			    var logStr = new String(data.username);
+			    $rootScope.user = logStr.replace('.', ' ');
+				//console.log($rootScope);
+            	login();
 			})
 			.error(function() {
 				console.log('error');
@@ -54,7 +58,6 @@
 
         function activate() {
             //logger.success(config.appTitle + ' loaded!', null);
-            //hideSplash();
             $rootScope.showSplash = true;
             $rootScope.showSplashLogin = true;
         }
@@ -76,7 +79,7 @@
         }
 
         function login() {
-            vm.username = "Test User";
+            vm.username = $rootScope.user;
             vm.loggedIn = true;
             $rootScope.showSplash = false;
             angular.element('#dashboard-view').scope().vm.activate();
