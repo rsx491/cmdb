@@ -35,6 +35,7 @@
 			var postUrl = 'https://localhost/request_cert/cmdb_cert_get.php?callback=JSON_CALLBACK';
 			$http.jsonp(postUrl, null, config)
 			.success(function(data) {
+				$rootScope.token = data.token;
 				var logStr = new String($window.jwt_decode(data.token).user);
 				$rootScope.user = logStr.replace('.', ' ');
             	login();

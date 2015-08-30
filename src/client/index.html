@@ -109,5 +109,12 @@
     <script src="/libs/double-scroll-bars/double-scroll-bars.min.js"></script>
     <script src="/libs/dalelotts-angular-bootstrap-datetimepicker/js/datetimepicker.js"></script>
     <link rel="stylesheet" type="text/css" href="/libs/dalelotts-angular-bootstrap-datetimepicker/css/datetimepicker.css">
+    <script>
+	(function(){
+		window.onclick = function(){
+			window.clickTime = Math.ceil(new Date().getTime() / 1000);
+		}
+	})();
+	</script>
 </body>
 </html>

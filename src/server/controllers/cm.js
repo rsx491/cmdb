@@ -1,4 +1,5 @@
 /**
+/**
 * CM Crud controller
 **/
 
@@ -56,7 +57,6 @@ var CMController = {
 	},
 
 	postRecord : function(req, res){
-
 		if(req.body._id) {
 			delete req.body._id;
 		}

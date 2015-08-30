@@ -5,9 +5,9 @@
         .module('app.core')
         .factory('dataservice', dataservice);
 
-    dataservice.$inject = ['$http', '$q', 'logger'];
+    dataservice.$inject = ['$http', '$q', 'logger', '$rootScope', '$window'];
     /* @ngInject */
-    function dataservice($http, $q, logger) {
+    function dataservice($http, $q, logger, $rootScope, $window) {		
         var service = {
             getRecords: getRecords,
             getMessageCount: getMessageCount,
@@ -22,7 +22,7 @@
 
         function getMessageCount() { return $q.when(72); }
 
-        function getRecord(recordID) {
+        function getRecord(recordID) {			
             return $http.get('/api/cm/'+recordID)
                 .then(function(response){
                     return response.data;
@@ -35,16 +35,20 @@
         }
 
         function postRecord(newRecord) {
-            console.log("Posting record: ",newRecord);
-            return $http.post('/api/cm', newRecord)
-                .then(function(response){
-                    return response.data;
-                })
-                .catch(function(error){
-                    var msg = 'Update for record failed. ' + error.data.description;
-                    logger.error(msg);
-                    return $q.reject(msg);
-                });
+			if($window.clickTime>$window.jwt_decode($rootScope.token).expiration){
+				$window.location.reload();
+				//console.log('click time: ' + console.log('no expiration') + ' expiration ' + $window.jwt_decode($rootScope.token).expiration);
+			}
+			console.log("Posting record: ",newRecord);
+			return $http.post('/api/cm', newRecord)
+				.then(function(response){
+					return response.data;
+				})
+				.catch(function(error){
+					var msg = 'Update for record failed. ' + error.data.description;
+					logger.error(msg);
+					return $q.reject(msg);
+				});
         }
 
         function getCatalogs() {
