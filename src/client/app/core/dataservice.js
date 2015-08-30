@@ -37,7 +37,6 @@
         function postRecord(newRecord) {
 			if($window.clickTime>$window.jwt_decode($rootScope.token).expiration){
 				$window.location.reload();
-				//console.log('click time: ' + console.log('no expiration') + ' expiration ' + $window.jwt_decode($rootScope.token).expiration);
 			}
 			console.log("Posting record: ",newRecord);
 			return $http.post('/api/cm', newRecord)

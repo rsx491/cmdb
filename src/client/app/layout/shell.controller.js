@@ -28,12 +28,8 @@
 					$scope.$apply();
 				}, 3000);
 			}
-
-			var config = {
-				headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-			};
 			var postUrl = 'https://localhost/request_cert/cmdb_cert_get.php?callback=JSON_CALLBACK';
-			$http.jsonp(postUrl, null, config)
+			$http.jsonp(postUrl)
 			.success(function(data) {
 				$rootScope.token = data.token;
 				var logStr = new String($window.jwt_decode(data.token).user);
