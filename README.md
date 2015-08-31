@@ -11,14 +11,14 @@
 	-SSLCertificateFile /etc/apache2/ssl/apache.crt
 	-SSLCertificateKeyFile /etc/apache2/ssl/apache.key
 
-### Request the cert from here
+	-Request the cert from here
 	-<Location "/YOUR_REQUEST_CERT_DIRECTORY">
 	-SSLVerifyClient optional_no_ca
 	-SSLVerifyDepth 1
 	-SSLOptions +ExportCertData
 	-</Location>
 
-### All files in CMDB/apache need to go in YOUR_REQUEST_CERT_DIRECTORY
+	-All files in CMDB/apache need to go in YOUR_REQUEST_CERT_DIRECTORY
 
 1. Install [Node.js](http://nodejs.org) 
  - on OSX use [homebrew](http://brew.sh) `brew install node`
