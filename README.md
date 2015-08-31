@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-### As Per the File Manager Appliction, Please make sure to properly configure Apache HTTP with the following:
+### As Per the File Manager Appliction, Please make sure to properly configure Apache HTTP
 
 ### HTTPS Config
 	-SSLEngine on
