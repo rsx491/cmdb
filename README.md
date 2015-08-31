@@ -4,22 +4,21 @@
 
 ## Prerequisites
 
-## As Per the File Manager Appliction, Please make sure to properly configure Apache HTTP with the following:
+### As Per the File Manager Appliction, Please make sure to properly configure Apache HTTP with the following:
 
-HTTPS Config
-SSLEngine on
-SSLCertificateFile /etc/apache2/ssl/apache.crt
-SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-#SSLCACertificatePath /etc/ssl/certs
+### HTTPS Config
+	-SSLEngine on
+	-SSLCertificateFile /etc/apache2/ssl/apache.crt
+	-SSLCertificateKeyFile /etc/apache2/ssl/apache.key
 
-# Request the cert from here
-<Location "/YOUR_REQUEST_CERT_DIRECTORY">
-		SSLVerifyClient optional_no_ca
-		SSLVerifyDepth 1
-		SSLOptions +StdEnvVars +ExportCertData
-</Location>
+### Request the cert from here
+	-<Location "/YOUR_REQUEST_CERT_DIRECTORY">
+	-SSLVerifyClient optional_no_ca
+	-SSLVerifyDepth 1
+	-SSLOptions +ExportCertData
+	-</Location>
 
-***All files in CMDB/apache need to go in YOUR_REQUEST_CERT_DIRECTORY
+### All files in CMDB/apache need to go in YOUR_REQUEST_CERT_DIRECTORY
 
 1. Install [Node.js](http://nodejs.org) 
  - on OSX use [homebrew](http://brew.sh) `brew install node`
