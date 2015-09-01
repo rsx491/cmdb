@@ -661,7 +661,7 @@ form > div > select {
         }
 
             .dropdown-menu li > a:hover {
-                background: #f9f9f9 !important;
+                background: #dce9f9 !important;
                 filter: none;
                 color: #888;
             }
@@ -1853,14 +1853,16 @@ table td {
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-    cursor: pointer;
+    cursor: pointer !important;
+}
+
+tr.results:hover td {
+    background-color: rgb(235,235,235);
 }
 
 tr.selected {
     background-color: rgb(215, 250, 237);
 }
-
-
 .widget-content.referrer {
     border-width: 0;
 }

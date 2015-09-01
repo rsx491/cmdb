@@ -50,7 +50,8 @@
                 var ds = angular.element('#dashboard-view').scope();
                 data.recordIndex = ds.vm.records.records.length;
                 ds.vm.records.records.push(data);
-                angular.element('div.modal').modal('hide');  
+                angular.element('div.modal').modal('hide');
+                $('js-tree').jstree().refresh();  
             }
             $scope.isProcessing = false;
         });
@@ -415,8 +416,4 @@
 
 
     }
-
-    
-
-
 })();
