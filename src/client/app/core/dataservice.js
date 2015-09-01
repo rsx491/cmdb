@@ -34,7 +34,7 @@
                 });
         }
 
-        function postRecord(newRecord) {z
+        function postRecord(newRecord) {
 			if($window.clickTime>$window.jwt_decode($rootScope.token).expiration){
 				$window.location.reload();
 			}
