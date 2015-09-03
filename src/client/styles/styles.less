@@ -1022,7 +1022,7 @@ ul.user-buttons li {
 	border-spacing: 0;
 	width: 100%;
 }
-        
+    
 .widget th:first-child {
     border-radius: 6px 0 0;
 }
@@ -1854,15 +1854,20 @@ table td {
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
     cursor: pointer !important;
+    background-color: rgb(215, 250, 237) !important;
 }
 
 tr.results:hover td {
     background-color: rgb(235,235,235);
+    background-color: rgb(215, 250, 237) !important;
+    z-index: 1000;
 }
 
 tr.selected {
-    background-color: rgb(215, 250, 237);
+    background-color: rgb(215, 250, 237) !important;
+    z-index: 1000;
 }
+
 .widget-content.referrer {
     border-width: 0;
 }
