@@ -17,15 +17,16 @@
         };
         vm.username = "Not Logged In";
         vm.loggedIn =  false;
+        $rootScope.LogVal = 'Before you click Login, please make sure you have inserted your PIV Card';
 
         $rootScope.doLogin = function(){
 			console.log('trying login test..');
 			var error = function(){
-				var error = 'Error: See HPC Administrator';
-				$scope.LogVal = error;
+				var error = 'Error: Please See HPC Administrator';
+				$rootScope.LogVal = error;
 				setTimeout(function(){
-					$scope.LogVal = 'Log In';
-					$scope.$apply();
+					$rootScope.LogVal = 'Before you click Login, please make sure you have inserted your PIV Card';
+					$rootScope.$apply();
 				}, 3000);
 			}
 			var postUrl = 'https://localhost/request_cert/cmdb_cert_get.php?callback=JSON_CALLBACK';
@@ -37,6 +38,7 @@
             	login();
 			})
 			.error(function() {
+				error();
 				console.log('error');
 			});
 

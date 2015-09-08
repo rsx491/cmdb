@@ -5,9 +5,9 @@
         .module('app.layout')
         .controller('SidebarController', SidebarController);
 
-    SidebarController.$inject = ['$state', 'routerHelper'];
+    SidebarController.$inject = ['$state', 'routerHelper', '$rootScope'];
     /* @ngInject */
-    function SidebarController($state, routerHelper) {
+    function SidebarController($state, routerHelper, $rootScope) {
         var vm = this;
 
         vm.nodeSelected = function(scope, obj){

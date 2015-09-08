@@ -26,15 +26,14 @@
     <link rel="stylesheet" href="/.tmp/styles.css">
     <!-- endinject -->
     <!-- endbuild -->
-
 </head>
-<body>
+<body ng-cloak>
     <div>
         <div ng-include="'app/layout/shell.html'"></div>
         <div id="splash-page" ng-show="showSplash">
             <div class="page-splash">
                 <div class="page-splash-message" ng-show="showSplashLogin">
-                    <h3>Before you click Login, please make sure you have inserted your PIV Card</h3>
+                    <h3>{{LogVal}}</h3>
                     <button ng-click="doLogin()" class='.btn .btn-primary'>Login</button>
                 </div>
                 <div class="progress progress-striped active page-progress-bar">
